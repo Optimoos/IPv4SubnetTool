@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+<title>IPv4 Subnet Tool</title>
+<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+<link rel="stylesheet" type="text/css" href="/subnet_tool.css">
+<link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;700&display=swap" rel="stylesheet"> 
+<script src="/subnet_tool.js"></script>
+</head>
+<body>
+
+<div class="grid-container">
+	<div class="inputboxes">
+		<form>
+			<label for="ipv4add">IPv4 Address:</label>
+			<input id="ipv4add" type="text" onchange="updateIPv4()"><br>
+			<label for="netmask">Netmask:</label>
+			<input id="netmask" type="text" onchange="updateNetmask()"><br>
+			<label for="cidr">CIDR mask:</label>
+			<input id="cidr" type="text" onchange="cidrText()"><br>
+			<input id="cidr_slider" type="range" min="0" max="32" step="1" value="24" oninput="cidrSlider()" title="Slide to adjust CIDR">
+		</form>
+	</div>
+	<div class="before">
+			<h1><a href="#" onclick="goBefore();return false;" title="Go to network before">Network before</a></h1>
+			Coincident Address: <div class="ilt" id="b_co_ip"></div><br>
+			Network Address: <div class="ilt" id="b_net"></div><br>
+			Broadcast Address: <div class="ilt" id="b_broad"></div><br>
+	</div>
+	<div class="network">
+			<h1>This network</h1>
+			This Address: <div class="ilt" id="t_add"></div><br>
+			<a href="#" onclick="showBinary();return false;" title="Show binary representation">Network Address</a>: <div class="ilt" id="t_net"></div><br>
+			<div id="network-binary">
+				Binary Address:<br>
+				<div id="t_bin_add"></div>
+				Binary Netmask:<br>
+				<div id="t_bin_net"></div>
+			</div>
+			Broadcast Address: <div class="ilt" id="t_broad"></div><br>
+			Usable addresses: <div class="ilt" id="t_usable"></div><br>
+	</div>
+	<div class="after">
+			<h1><a href="#" onclick="goAfter();return false;" title="Go to network after">Network after</a></h1>
+			Coincident Address: <div class="ilt" id="a_co_ip"></div><br>
+			Network Address: <div class="ilt" id="a_net"></div><br>
+			Broadcast Address: <div class="ilt" id="a_broad"></div><br>
+	</div>
+</div>
+<div class="feedback"><a href="https://github.com/Optimoos/IPv4SubnetTool">Feedback</a></div>
+
+</body>
+</html> 

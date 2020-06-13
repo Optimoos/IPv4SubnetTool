@@ -1,0 +1,111 @@
+body {
+	--fg-col: #E6EBE0;
+	--bg-col: #323031;
+	--err-col: #db3a34;
+	--acc-col: #427AA1;
+	background-color: var(--bg-col);
+	color: var(--fg-col);
+	font-family: 'Source Code Pro', monospace;
+}
+
+a {
+	color: var(--fg-col);
+}
+
+input {
+	font-family: 'Source Code Pro', monospace;
+	background-color: var(--bg-col);
+	color: var(--fg-col);
+	width: 9em;
+}
+
+input:disabled {
+	background-color: #ebebe4;
+	color: gray;
+}
+
+.ilt {
+	display: inline-block;
+	vertical-align: top;
+}
+
+.slider {
+	display: inline-block;
+	vertical-align: top;
+}
+
+#cidr_slider {
+	-webkit-appearance: none;
+	appearance: none;
+	border: 2px;
+	width: 100%;
+	height: 5px;
+	background: var(--fg-col);
+	outline: none;
+}
+
+#cidr_slider::-webkit-slider-thumb {
+	width: 100%;
+}
+
+#cidr_slider::-moz-range-thumb {
+	width: 15px;
+	height: 15px;
+	cursor: ew-resize;
+	border-radius: 15px;
+	border: 1px solid var(--bg-col);
+	background: var(--acc-col);
+}
+
+.error {
+	background-color: var(--err-col);
+}
+
+#network-binary {
+	display: none;
+}
+
+.grid-container {
+  display: grid;
+  justify-content: center;
+  align-content:center;
+  margin: 0 auto;
+  grid-template-columns: auto minmax(32ch, auto) auto;
+  grid-template-rows: auto auto;
+  gap: 1px 20px;
+  grid-template-areas: "inputboxes inputboxes inputboxes" "before network after";
+}
+
+.inputboxes { 
+	grid-area: inputboxes;
+	margin: 0 auto;
+	display: flex;
+	text-align: right;
+ }
+
+.network { 
+	grid-area: network;
+	border: 1px solid var(--acc-col);
+	border-radius: 25px;
+	padding: 5px;
+}
+
+.before {
+	grid-area: before;
+	border: 1px solid var(--acc-col);
+	border-radius: 25px;
+	padding: 5px;
+}
+
+.after { 
+	grid-area: after;
+	border: 1px solid var(--acc-col);
+	border-radius: 25px;
+	padding: 5px;
+}
+
+.feedback {
+	position: fixed;
+	right: 20px;
+	bottom: 20px;
+}
