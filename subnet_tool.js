@@ -19,6 +19,7 @@ var a_broad = "";
 
 const maxbin = '1111111111111111111111111111111';
 const maxint = parseInt(maxbin, 2);
+const minint = -1073741823;
 
 function updatePage() {
 	if (validateIPv4(document.getElementById("ipv4add").value) === false) {
@@ -30,13 +31,13 @@ function updatePage() {
 	let int_mask = parseInt(cidr_mask,2);
 	
 	let int_net = getNetwork(int_addr, int_mask);
-	if (int_net < 0) {
+	if (int_net < minint) {
 		t_net = "N/A";
 	} else {
 		t_net = num2dot(int_net);
 	}
 	let int_broad = getBroadcast(int_addr, int_mask);
-	if (int_broad < 0) {
+	if (int_broad < -1073741823) {
 		t_broad = "N/A";
 	} else {
 		t_broad = num2dot(int_broad);
@@ -46,7 +47,7 @@ function updatePage() {
 	let int_b_co_ip = getBefore(int_addr-1, int_mask);
 	let int_b_net = getNetwork(int_b_co_ip, int_mask);
 	let int_b_broad = getBroadcast(int_b_co_ip, int_mask);
-	if ((int_b_co_ip < 0) || (int_b_net < 0) || (int_b_broad < 0)) {
+	if ((int_b_co_ip < minint) || (int_b_net < minint) || (int_b_broad < minint)) {
 		b_co_ip = "None exists";
 		b_net = "N/A";
 		b_broad = "N/A";
@@ -60,7 +61,7 @@ function updatePage() {
 	let int_a_net = getNetwork(int_a_co_ip, int_mask);
 	let int_a_broad = getBroadcast(int_a_co_ip,int_mask);
 	
-	if ((int_a_co_ip < 0) || (int_a_net < 0) || (int_a_broad < 0)) {
+	if ((int_a_co_ip < minint) || (int_a_net < minint) || (int_a_broad < minint)) {
 		a_co_ip = "None exists";
 		a_net = "N/A";
 		a_broad = "N/A";
@@ -94,13 +95,10 @@ function updatePage() {
 
 function num2dot(num) 
 {
-    var d = num%256;
-    for (var i = 3; i > 0; i--) 
-    { 
-        num = Math.floor(num/256);
-        d = num%256 + '.' + d;
-    }
-    return d;
+    return ( (num>>>24) +'.' +
+        (num>>16 & 255) +'.' +
+        (num>>8 & 255) +'.' +
+        (num & 255) );
 }
 
 function cidrSlider() {
@@ -164,7 +162,8 @@ function cidrToMask(c) {
 }
 
 function getNetwork(int_a, int_m) {
-	return int_a & int_m;
+	let tmp = int_a & int_m;
+	return tmp;
 }
 
 function getBroadcast(b_addr, b_mask) {

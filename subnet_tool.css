@@ -45,7 +45,12 @@ input:disabled {
 }
 
 #cidr_slider::-webkit-slider-thumb {
-	width: 100%;
+        width: 15px;
+        height: 15px;
+        cursor: ew-resize;
+        border-radius: 15px;
+        border: 1px solid var(--bg-col);
+        background: var(--acc-col);
 }
 
 #cidr_slider::-moz-range-thumb {
