@@ -8,7 +8,7 @@ I got tired of calculating these details in my head and wanted a quick tool that
 
 ## Hosting and Privacy
 
-A public version of the tool is hosted at https://ip.iceborn.ca. The server is configured with redirects so that if you go to ip.iceborn.ca/<ip>/<CIDR> (ie: https://ip.iceborn.ca/8.8.8.8/24) you'll be taken directly to that network. The redirect provides the GET variables ip= and c= which are loaded by JavaScript when present.
+A public version of the tool is hosted at https://ip.iceborn.ca. The server is configured with redirects so that if you go to ip.iceborn.ca/`<ip>`/`<CIDR>` (ie: https://ip.iceborn.ca/8.8.8.8/24) you'll be taken directly to that network. The redirect provides the GET variables ip= and c= which are loaded by JavaScript when present.
 
 Although the tool doesn't require any communication with the server once the page is loaded, if you are ultra security-conscious and don't want IPs logged, be aware that using the redirect or accessing the page directly with your own GET variables will be logged by the server. Once the page is loaded, any adjustments are not submitted to the server or logged.
 
