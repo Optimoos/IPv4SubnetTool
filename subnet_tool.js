@@ -17,58 +17,44 @@ var a_co_ip = "";
 var a_net = "";
 var a_broad = "";
 
-const maxbin = '1111111111111111111111111111111';
-const maxint = parseInt(maxbin, 2);
-const minint = -1073741823;
+const maxbin = '01111111111111111111111111111111';
+// bitwise OR converts maxint to unsigned int
+const maxint = (parseInt(maxbin, 2) | 0);
+const minbin = '10000000000000000000000000000000';
+const minint = (parseInt(minbin, 2) | 0);
 
 function updatePage() {
 	if (validateIPv4(document.getElementById("ipv4add").value) === false) {
 		return;
 	}
 	let bin_addr = ipv4DottedToBinary(ipv4_octs);
-	let cidr_mask = cidrToMask(cidr);
 	let int_addr = parseInt(bin_addr,2);
-	let int_mask = parseInt(cidr_mask,2);
+	let int_mask = parseInt(cidrToBinMask(cidr),2);
 	
-	let int_net = getNetwork(int_addr, int_mask);
-	if (int_net < minint) {
-		t_net = "N/A";
-	} else {
-		t_net = num2dot(int_net);
-	}
-	let int_broad = getBroadcast(int_addr, int_mask);
-	if (int_broad < -1073741823) {
-		t_broad = "N/A";
-	} else {
-		t_broad = num2dot(int_broad);
-	}
+	t_net = num2dot(getNetwork(int_addr, int_mask));
+	t_broad = num2dot(getBroadcast(int_addr, int_mask));
 	t_usable = getUsable(cidr);
 	
-	let int_b_co_ip = getBefore(int_addr-1, int_mask);
-	let int_b_net = getNetwork(int_b_co_ip, int_mask);
-	let int_b_broad = getBroadcast(int_b_co_ip, int_mask);
-	if ((int_b_co_ip < minint) || (int_b_net < minint) || (int_b_broad < minint)) {
+	if ((int_addr-1 & int_mask) === 0) {
 		b_co_ip = "None exists";
 		b_net = "N/A";
 		b_broad = "N/A";
 	} else {
+		let int_b_co_ip = getBefore(int_addr-1, int_mask);
 		b_co_ip = num2dot(int_b_co_ip);
-		b_net = num2dot(int_b_net);
-		b_broad = num2dot(int_b_broad);
+		b_net = num2dot(getNetwork(int_b_co_ip, int_mask));
+		b_broad = num2dot(getBroadcast(int_b_co_ip, int_mask));
 	}
 	
-	let int_a_co_ip = getAfter(int_addr, int_mask);
-	let int_a_net = getNetwork(int_a_co_ip, int_mask);
-	let int_a_broad = getBroadcast(int_a_co_ip,int_mask);
-	
-	if ((int_a_co_ip < minint) || (int_a_net < minint) || (int_a_broad < minint)) {
+	if ((int_addr & int_mask) === (int_mask | 0)) {
 		a_co_ip = "None exists";
 		a_net = "N/A";
 		a_broad = "N/A";
 	} else {
+		let int_a_co_ip = getAfter(int_addr, int_mask);
 		a_co_ip = num2dot(int_a_co_ip);
-		a_net = num2dot(int_a_net);
-		a_broad = num2dot(int_a_broad);
+		a_net = num2dot(getNetwork(int_a_co_ip, int_mask));
+		a_broad = num2dot(getBroadcast(int_a_co_ip, int_mask));
 	}
 
 	document.getElementById("cidr_slider").value = cidr;
@@ -123,7 +109,6 @@ function updateNetmask() {
 			document.getElementById("cidr").disabled=false;			
 			let t_arr = b_mask.split("1");
 			cidr = t_arr.length-1;
-			console.log(cidr);
 			
 			updatePage();
 		}
@@ -150,7 +135,7 @@ function binaryStringPad(b_str, b_bits) {
 	return b_str;
 }
 
-function cidrToMask(c) {
+function cidrToBinMask(c) {
 	let mask = '';
 	for (let i=0;i<c;i++) {
 		mask += "1";
@@ -162,12 +147,11 @@ function cidrToMask(c) {
 }
 
 function getNetwork(int_a, int_m) {
-	let tmp = int_a & int_m;
-	return tmp;
+	return (int_a & int_m);
 }
 
 function getBroadcast(b_addr, b_mask) {
-	return b_addr | ~ b_mask;
+	return (b_addr | ~ b_mask);
 }
 
 function getUsable(c) {
@@ -180,12 +164,12 @@ function getUsable(c) {
 	case 32:
 		return "1 - Host address";
 	default:
-		return ((maxint >>> (cidr - 1)) - 1);
+		return ((maxint >>> (cidr-1)) - 1);
 	}
 }
 
 function getBefore(i_addr, i_mask) {
-	return i_addr - ~ i_mask;
+	return (i_addr - ~ i_mask);
 }
 
 function getAfter(i_addr, i_mask) {
@@ -193,13 +177,17 @@ function getAfter(i_addr, i_mask) {
 }
 
 function goBefore() {
-	document.getElementById("ipv4add").value = b_co_ip;
-	updateIPv4();
+	if (!b_co_ip.includes("None")) {
+		document.getElementById("ipv4add").value = b_co_ip;
+		updateIPv4();
+	}
 }
 
 function goAfter() {
-	document.getElementById("ipv4add").value = a_co_ip;
-	updateIPv4();	
+	if (!a_co_ip.includes("None")) {
+		document.getElementById("ipv4add").value = a_co_ip;
+		updateIPv4();	
+	}
 }	
 
 function validateIPv4(addr) {
